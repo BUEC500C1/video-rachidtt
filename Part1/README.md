@@ -45,6 +45,19 @@ Plotting the Data:
 
 Then compare processes and threads:
 
+### Multi-Processing
+-Uses multiple Processes, that don't share memory, removing synchronization constraints
+-Higher overhead
+-Used for CPU bound tasks
+-Child Processes can be killed
+
+### Multi-Threading
+
+-Uses multiple Threads, which share memory and so need to be careful when writing to the same memory
+-Smaller overhead
+-GIL may serialize in CPython
+-Used for IO-bound Tasks
+
 
 
 
