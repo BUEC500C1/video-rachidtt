@@ -34,11 +34,13 @@ nthreads 	 CpuThread    CpuProcess   IoThread     IoProcess
 Plotting the Data:
 
 
-![](/Images/threadsVProcCPU.png)
 
-![](/Images/threadsVProcIO.png)
 
-<img src="BUEC500C1/video-rachidtt/blob/master/Part1/Images/threadsVProcCPU.png" width=800 />
+
+<img src="Images/threadsVProcIO.png" />
+<img src="Images/threadsVProcCPU.png" />
+
+
 
 
 Then compare processes and threads:
