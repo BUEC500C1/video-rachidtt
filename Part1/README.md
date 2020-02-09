@@ -38,7 +38,7 @@ Plotting the Data:
 
 ![](/Images/threadsVProcIO.png)
 
-<img src="/Images/threadsVProcIO.png">
+<img src="BUEC500C1/video-rachidtt/blob/master/Part1/Images/threadsVProcCPU.png",width=800 />
 
 
 Then compare processes and threads:
