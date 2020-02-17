@@ -6,9 +6,27 @@ from tweepy import Cursor
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+from io import open
 
 
 
+class JsonTweet():
+	def __init__(self,tweet):
+		self.user = tweet['user']['name']
+		
+		
+		
+		if not 'retweeted_status' in tweet:
+			self.text = tweet['full_text']
+			self.rt = False
+			self.favct = tweet['favorite_count']
+			self.rtct = tweet['retweet_count']
+		else:
+			self.text = tweet['retweeted_status']['full_text']
+			self.rt = tweet['retweeted_status']['user']['retweeted']
+			self.favct = tweet['retweeted_status']['user']['favorite_count']
+			self.rtct = tweet['retweeted_status']['user']['retweet_count']
+		
 
 
 class TwitterClient():
@@ -85,10 +103,11 @@ if(__name__ == "__main__"):
 
 
 	data = twitter_client.get_user_timeline_tweets(num)
-	#print(data)
 
 
-	tweets = [[tweet.full_text] for tweet in data]
+
+	#tweets = [[tweet.full_text] for tweet in data]
+
 	for i in range(len(data)):
 		try:	
 				with open('data.json', 'a', encoding='utf8') as file:
@@ -97,8 +116,8 @@ if(__name__ == "__main__"):
 		except BaseException as e:
 			print("Error on_data: %s" %str(e))
 
-	#print(data[0]._json)
 
-	tweets = [[tweet.full_text] for tweet in data]
-
-	#print(tweets[0].retweeted_status.full_text)
+	jsontwt = JsonTweet(data[0]._json)
+	print(jsontwt.user)
+	print(jsontwt.favct)
+	
