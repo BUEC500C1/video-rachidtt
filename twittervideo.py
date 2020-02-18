@@ -7,13 +7,16 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 from io import open
+from collections import Counter
 
 
 
 class JsonTweet():
 	def __init__(self,tweet):
 		self.user = tweet['user']['name']
-		
+		self.date = tweet['created_at']
+		self.daystr = (self.date).split()[:3] #first three words for just mmddyy
+		self.day = ' '.join(self.daystr) #cat the 3 string into one
 		
 		
 		if not 'retweeted_status' in tweet:
@@ -23,10 +26,15 @@ class JsonTweet():
 			self.rtct = tweet['retweet_count']
 		else:
 			self.text = tweet['retweeted_status']['full_text']
-			self.rt = tweet['retweeted_status']['user']['retweeted']
-			self.favct = tweet['retweeted_status']['user']['favorite_count']
-			self.rtct = tweet['retweeted_status']['user']['retweet_count']
-		
+			#self.rt = tweet['retweeted_status']['user']['retweeted']
+			#self.favct = tweet['retweeted_status']['user']['favorite_count']
+			#self.rtct = tweet['retweeted_status']['user']['retweet_count']
+	
+	def separateByDay(JsonTweet,len):
+		pass
+
+
+
 
 
 class TwitterClient():
@@ -95,29 +103,28 @@ class TwitterListener(StreamListener):
 '''
 if(__name__ == "__main__"):
 
-	fetchlist = ["elon","Nasa"]
+	#fetchlist = ["elon","Nasa"]
 	filename="data.json"
-	user="elonmusk"  #Enter @
-	num = 10 #Number of tweets
+	user="elonmusk"  #Enter the @ of wanted user
+	num = 10 #Number of tweets to fetch
+	jsonwtlist = [] #list of Jsontwt objects
+	daylist = []
+
 	twitter_client=TwitterClient(user)
-
-
 	data = twitter_client.get_user_timeline_tweets(num)
 
 
-
-	#tweets = [[tweet.full_text] for tweet in data]
-
 	for i in range(len(data)):
 		try:	
-				with open('data.json', 'a', encoding='utf8') as file:
+				with open('data.json', 'a', encoding='utf8') as file:#write each tweet to file
 					json.dump(data[i]._json, file)
 					file.write('\n')
 		except BaseException as e:
 			print("Error on_data: %s" %str(e))
 
+		jsonwtlist.append(JsonTweet(data[i]._json))#put each into JsonTweet Object
+		daylist.append(jsonwtlist[i].daystr[2])
 
-	jsontwt = JsonTweet(data[0]._json)
-	print(jsontwt.user)
-	print(jsontwt.favct)
+	numvids = len(Counter(daylist).keys()) #number of different days of tweets = number of videos
+
 	
