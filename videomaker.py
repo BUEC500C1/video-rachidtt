@@ -77,7 +77,7 @@ def convertToImage(User,Text,number,day):
 def convertToVideo(path):
 
 
-	stream = ffmpeg.input(r'tweetimages/'+path+'/*.png', pattern_type='glob', framerate=1)
+	stream = ffmpeg.input(r'tweetimages/'+path+'/*.png', pattern_type='glob', framerate=0.33)
 	#stream = ffmpeg.input(r'tweetimages/*.png', pattern_type='glob', framerate=1)
 	#stream = ffmpeg.output(stream,'tweetimages/movie1.mp4')
 	stream = ffmpeg.output(stream,'Videos/'+path+'.mp4',loglevel="quiet")

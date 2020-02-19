@@ -160,9 +160,10 @@ if(__name__ == "__main__"):
 
 	for i in range(numcores):
 		WorkerThread(jobqueue,i).start() #Not daemon so no need to join 
+		
 
 
-	print('Done!\n')
+	#print('Done!\n')
 
 
 	
