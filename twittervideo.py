@@ -1,6 +1,3 @@
-import keys
-import tweepy
-import json
 from tweepy import API
 from tweepy import Cursor
 from tweepy.streaming import StreamListener
@@ -8,6 +5,11 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 from io import open
 from collections import Counter
+from videomaker import *
+import keys
+import tweepy
+import json
+
 
 
 
@@ -48,13 +50,13 @@ class TwitterClient():
 		for tweet in Cursor(self.twitter_client.user_timeline, id=self.twitter_user,tweet_mode='extended').items(amount):
 			tweets.append(tweet)		
 				
-			try:	
+			'''try:	
 				with open('tweets.json', 'a', encoding='utf8') as file:
 					json.dump(tweet._json, file)
 					file.write('\n')
 			except BaseException as e:
 				print("Error on_data: %s" %str(e))
-
+'''
 		return tweets
 
 
@@ -103,28 +105,65 @@ class TwitterListener(StreamListener):
 '''
 if(__name__ == "__main__"):
 
-	#fetchlist = ["elon","Nasa"]
-	filename="data.json"
-	user="elonmusk"  #Enter the @ of wanted user
-	num = 10 #Number of tweets to fetch
+	print('Welcome to the Twitter Daily Video Summary! \n\n\n')
+	#user="elonmusk"  #Enter the @ of wanted user
+	num = 100 #Number of tweets to fetch
+	numcores=4 #will be the number of concurent threads we will let run
 	jsonwtlist = [] #list of Jsontwt objects
 	daylist = []
+	tw1 = TwitterClient()		
+	exist=False
+
+	while(exist==False):
+		print('Please enter the Twitter @:')
+		user=input()	
+		try:
+			u=tw1.twitter_client.get_user(user)
+			print("user "+user+" exists, continuing")
+			exist=True
+		except Exception:
+			print('Error: User does not exist!\n')
+
+
+
 
 	twitter_client=TwitterClient(user)
 	data = twitter_client.get_user_timeline_tweets(num)
-
-
 	for i in range(len(data)):
-		try:	
-				with open('data.json', 'a', encoding='utf8') as file:#write each tweet to file
-					json.dump(data[i]._json, file)
-					file.write('\n')
-		except BaseException as e:
-			print("Error on_data: %s" %str(e))
-
 		jsonwtlist.append(JsonTweet(data[i]._json))#put each into JsonTweet Object
 		daylist.append(jsonwtlist[i].daystr[2])
 
-	numvids = len(Counter(daylist).keys()) #number of different days of tweets = number of videos
 
+	lastday=jsonwtlist[0].daystr[2]
+	number=0
+	daylist2=[]
+	daylist2.append(jsonwtlist[0].day.replace(' ','_'))
+	for i in range(len(jsonwtlist)): #Create a folder for each day, inside has numbered pictures of tweets that day
+		if(jsonwtlist[i].daystr[2] == lastday):
+			number+=1
+			convertToImage(user,jsonwtlist[i].text,number,jsonwtlist[i].day)
+		else:
+			daylist2.append(jsonwtlist[i].day.replace(' ','_'))
+			number=1
+			lastday=jsonwtlist[i].daystr[2]
+			convertToImage(user,jsonwtlist[i].text,number,jsonwtlist[i].day)
+
+	print('converting the videos...')
+
+
+	jobqueue=queue.Queue()
+
+	for i in range(len(daylist2)):#For each user_ddmmyy Folder, make a video of all the pictures in it
+		imagespath=user+'_'+daylist2[i]
+		jobqueue.put(imagespath)
+		#convertToVideo(imagespath)
+
+	for i in range(numcores):
+		WorkerThread(jobqueue,i).start() #Not daemon so no need to join 
+
+
+	print('Done!\n')
+
+
+	
 	
