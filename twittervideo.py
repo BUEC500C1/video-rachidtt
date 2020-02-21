@@ -6,7 +6,7 @@ from tweepy import Stream
 from io import open
 from collections import Counter
 from videomaker import *
-import keys
+import configparser
 import tweepy
 import json
 
@@ -65,8 +65,18 @@ class TwitterClient():
 
 class Authenticator():
 	def authenticate(self):
-		auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_KEY_SECRET)
-		auth.set_access_token(keys.ACCESS_TOKEN,keys.ACCESS_TOKEN_SECRET)
+
+		config = configparser.ConfigParser()
+		config.read('keys')
+		CONSUMER_KEY = config.get('auth', 'consumer_key').strip()
+		CONSUMER_KEY_SECRET = config.get('auth', 'consumer_secret').strip()
+		ACCESS_TOKEN = config.get('auth', 'access_token').strip()
+		ACCESS_TOKEN_SECRET = config.get('auth', 'access_secret').strip()
+
+		#auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_KEY_SECRET)
+		#auth.set_access_token(keys.ACCESS_TOKEN,keys.ACCESS_TOKEN_SECRET)
+		auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_KEY_SECRET)
+		auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 		return auth
 '''
 class TwitterStreamer():

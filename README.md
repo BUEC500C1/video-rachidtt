@@ -38,26 +38,21 @@ pip3 install -r requirements.txt
 Install ffmpeg
 ```
 sudo apt update
-sudo apt install ffmpeg
+sudo apt-get install ffmpeg
 ```
 
-In the main directory, Create keys.py, and enter your keys in this format:
+In the main directory, Create file 'keys', and enter your keys in this format:
 
 ```
-ACCESS_TOKEN = ""
-ACCESS_TOKEN_SECRET = ""
-CONSUMER_KEY = ""
-CONSUMER_KEY_SECRET = ""
-```
-
-In the main directory, Create a folder called "tweetimages", this will hold the image version of tweets:
-
-```
-mkdir tweetimages
+[auth]
+consumer_key = ****
+consumer_secret = ****
+access_token = ****
+access_secret = ****
 ```
 
 
-Run twittervideo, when prompted, enter the handle:
+Run twittervideo and enter the handle:
 
 ```
 python3 twittervideo.py
