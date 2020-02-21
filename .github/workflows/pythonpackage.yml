@@ -30,4 +30,11 @@ jobs:
     - name: Test with pytest
       run: |
         pip3 install pytest
+        touch keys
+        echo "[auth]" >> keys 
+        echo ${{ secrets. ACCESS_TOKEN }} >>keys
+        echo ${{ secrets.ACCESS_TOKEN_SECRET }} >>keys
+        echo ${{ secrets.CONSUMER_KEY }} >>keys
+        echo ${{ secrets.CONSUMER_KEY_SECRET }} >>keys
+
         python3 -m pytest Tests.py 
