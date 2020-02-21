@@ -9,7 +9,8 @@ from videomaker import *
 import configparser
 import tweepy
 import json
-
+import os.path
+from os import path
 
 
 
@@ -66,12 +67,14 @@ class TwitterClient():
 class Authenticator():
 	def authenticate(self):
 
-		config = configparser.ConfigParser()
-		config.read('keys')
-		CONSUMER_KEY = config.get('auth', 'consumer_key').strip()
-		CONSUMER_KEY_SECRET = config.get('auth', 'consumer_secret').strip()
-		ACCESS_TOKEN = config.get('auth', 'access_token').strip()
-		ACCESS_TOKEN_SECRET = config.get('auth', 'access_secret').strip()
+
+		if path.exists('keys'):
+			config = configparser.ConfigParser()
+			config.read('keys')
+			CONSUMER_KEY = config.get('auth', 'consumer_key').strip()
+			CONSUMER_KEY_SECRET = config.get('auth', 'consumer_secret').strip()
+			ACCESS_TOKEN = config.get('auth', 'access_token').strip()
+			ACCESS_TOKEN_SECRET = config.get('auth', 'access_secret').strip()
 
 		#auth = tweepy.OAuthHandler(keys.CONSUMER_KEY, keys.CONSUMER_KEY_SECRET)
 		#auth.set_access_token(keys.ACCESS_TOKEN,keys.ACCESS_TOKEN_SECRET)
