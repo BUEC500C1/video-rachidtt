@@ -10,6 +10,21 @@ Python Threads Versus Processes
 Then ran tested the code provided in (Python Threads Versus Processes) and  compared processes and threads, details are in the readme of /Part1
 
 
+
+##Evaluation
+
+With a 4 core processor with 2.6GHz clockrate, I ran the following commands on a 3 min and 30 seconds video:
+```
+ffmpeg -i vid.mp4 -c:a copy -c:v copy -r 30 -s hd720 -b:v 2M outvid.mp4 
+```
+
+```
+ffmpeg -i vid.mp4 -c:a copy -c:v copy -r 30 -s hd480 -b:v 1M outvid2.mp4 
+```
+
+They were both almost instantly done taking 0.318s and 0.328s, and used 4.3% of CPU. Since I will be using 4 threads simultaneously, the conversion does not seem to be a possible bottleneck. 
+
+
 ## Part 2
 
 In part 2, I have made the daily video summarizing tool. By entering a twitter handle, the program will use Tweepy to fetch the n most recent tweets(currently 100, can be changed in twittervideo.py, variable 'num'), and seperate them by day, it will then create a video of each day, with frames being the tweets converted from text to image.
